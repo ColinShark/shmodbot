@@ -19,7 +19,7 @@ from sys import version_info
 from loguru import logger
 
 logger.add(
-    sink="./logs/pyrobot.log",
+    sink="./logs/shmodbot.log",
     enqueue=True,
     rotation="1 week",
     retention="1 month",
