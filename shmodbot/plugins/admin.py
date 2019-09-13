@@ -25,15 +25,15 @@ from ..utils.interval import IntervalHelper
 
 
 def timer(message: Message):
-    """Interaktion mit dem IntervalHelper, um "7h" oder "5d" zu UNIX Zeitstempeln
-    zu konvertieren.
+    """Interaction with the IntervalHelper modules to transform "7h" or "5d" to UNIX
+    timestamps.
     
     Parameters:
         message (`Message`):
-            Die eingehende Nachricht, deren command Attribut konvertiert wird.
+            The incoming message which values need to transformed.
     
     Returns:
-        int: Ein in der Zukunft liegender UNIX Zeitstempel
+        int: An UNIX timestamp in the future, or 0
     """
     if len(message.command) > 1:
         secs = IntervalHelper(message.command[1])
@@ -46,11 +46,11 @@ def timer(message: Message):
     Filters.command("ban") & Filters.chat(ShModBot.GROUP_ID) & Filters.admin
 )
 def ban(bot: ShModBot, message: Message):
-    """Bannt ein Gruppenmitglied.
+    """Bans a group member.
     
     Parameters:
-        bot (`ShModBot`): Der Bot selbst
-        message (`Message`): Die Nachricht, die den Befehl ausgelöst hat
+        bot (`ShModBot`): The bot itself
+        message (`Message`): The message triggering the handler
     """
     message.delete()
     try:
@@ -60,18 +60,18 @@ def ban(bot: ShModBot, message: Message):
             until_date=timer(message),
         )
     except Exception as err:
-        bot.send_message("ColinShark", f"`{err}`")
+        bot.send_message(ShModBot.ADMIN_GROUP_ID, f"`{err}`")
 
 
 @ShModBot.on_message(
     Filters.command("unban") & Filters.chat(ShModBot.GROUP_ID) & Filters.admin
 )
 def unban(bot: ShModBot, message: Message):
-    """Entbannt ein ehemaliges Gruppenmitglied.
+    """Unbans a previously banned member.
     
     Parameters:
-        bot (`ShModBot`): Der Bot selbst
-        message (`Message`): Die Nachricht, die den Befehl ausgelöst hat
+        bot (`ShModBot`): The bot itself
+        message (`Message`): The message triggering the handler
     """
     try:
         message.delete()
@@ -79,18 +79,18 @@ def unban(bot: ShModBot, message: Message):
             chat_id=message.chat.id, user_id=message.reply_to_message.from_user.id
         )
     except Exception as err:
-        bot.send_message("ColinShark", f"`{err}`")
+        bot.send_message(ShModBot.ADMIN_GROUP_ID, f"`{err}`")
 
 
 @ShModBot.on_message(
     Filters.command("mute") & Filters.chat(ShModBot.GROUP_ID) & Filters.admin
 )
 def mute(bot: ShModBot, message: Message):
-    """Schaltet ein Gruppenmitglied stumm.
+    """Mutes a group member.
     
     Parameters:
-        bot (`ShModBot`): Der Bot selbst
-        message (`Message`): Die Nachricht, die den Befehl ausgelöst hat
+        bot (`ShModBot`): The bot itself
+        message (`Message`): The message triggering the handler
     """
     message.delete()
     try:
@@ -101,18 +101,18 @@ def mute(bot: ShModBot, message: Message):
             until_date=timer(message),
         )
     except Exception as err:
-        bot.send_message("ColinShark", f"`{err}`")
+        bot.send_message(ShModBot.ADMIN_GROUP_ID, f"`{err}`")
 
 
 @ShModBot.on_message(
     Filters.command("unmute") & Filters.chat(ShModBot.GROUP_ID) & Filters.admin
 )
 def unmute(bot: ShModBot, message: Message):
-    """Hebt eine Stummschaltung eines Gruppenmitgliedes auf.
+    """Removes a users mute.
     
     Parameters:
-        bot (`ShModBot`): Der Bot selbst
-        message (`Message`): Die Nachricht, die den Befehl ausgelöst hat
+        bot (`ShModBot`): The bot itself
+        message (`Message`): The message triggering the handler
     """
     message.delete()
     try:
@@ -131,18 +131,19 @@ def unmute(bot: ShModBot, message: Message):
             ),
         )
     except Exception as err:
-        bot.send_message("ColinShark", f"`{err}`")
+        bot.send_message(ShModBot.ADMIN_GROUP_ID, f"`{err}`")
 
 
 @ShModBot.on_message(
     Filters.command("kick") & Filters.chat(ShModBot.GROUP_ID) & Filters.admin
 )
 def kick(bot: ShModBot, message: Message):
-    """Entfernt ein Gruppenmitglied.
+    """Removes a group member from the group by banning and unbanning
+    (that's how Telegram works).
     
     Parameters:
-        bot (`ShModBot`): Der Bot selbst
-        message (`Message`): Die Nachricht, die den Befehl ausgelöst hat
+        bot (`ShModBot`): The bot itself
+        message (`Message`): The message triggering the handler
     """
     message.delete()
     try:
@@ -158,4 +159,4 @@ def kick(bot: ShModBot, message: Message):
             chat_id=message.chat.id, user_id=message.reply_to_message.from_user.id
         )
     except Exception as err:
-        bot.send_message("ColinShark", f"`{err}`")
+        bot.send_message(ShModBot.ADMIN_GROUP_ID, f"`{err}`")

@@ -23,4 +23,10 @@ from ..utils import constants
 
 @ShModBot.on_message(Filters.chat(ShModBot.GROUP_ID) & Filters.new_chat_members)
 def welcome_new_members(bot: ShModBot, message: Message):
+    """Greet new users with an animation and a bit of text.
+    
+    Parameters:
+        bot (`ShModBot`): The bot itself
+        message (`Message`): The message triggering the handler
+    """
     message.reply_animation(**constants.welcome(message.new_chat_members))

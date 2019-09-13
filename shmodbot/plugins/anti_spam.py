@@ -31,16 +31,16 @@ SPAM = 0
     & ~Filters.admin
 )
 def anti_spam(bot: ShModBot, message: Message):
-    """Zählt die gesendeten Sticker und Animationen im Chat, um bei zu vielen
-    hintereinander selbige zu löschen.
+    """Counts the stickers and animations sent in the chat and removes the ones over
+    the limit.
     
-    Args:
-        bot (`ShModBot`): Der Bot selbst
-        message (`Message`): Die Nachricht, die die Funktion ausgelöst hat
+    Parameters:
+        bot (`ShModBot`): The bot itself
+        message (`Message`): The message triggering the handler
     """
     global SPAM
     if message.sticker and (
-        message.sticker.set_name
+        message.sticker.set_name.lower()
         in sql_helper.check_banned_pack(message.sticker.set_name)
     ):
         message.delete()
@@ -60,12 +60,11 @@ def anti_spam(bot: ShModBot, message: Message):
     & ~Filters.edited
 )
 def reset_anti_spam(bot: ShModBot, message: Message):
-    """Setzt den SPAM Zähler zurück, wenn eine Nachricht gesendet wurde, die kein
-    Sticker oder eine Animation ist.
+    """Resets the counter when something other than a sticker or animation was sent.
     
-    Args:
-        bot (`ShModBot`): Der Bot selbst
-        message (`Message`): Die Nachricht, die die Funktion ausgelöst hat
+    Parameters:
+        bot (`ShModBot`): The bot itself
+        message (`Message`): The message triggering the handler
     """
     global SPAM
     SPAM = 0

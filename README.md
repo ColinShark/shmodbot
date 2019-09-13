@@ -1,5 +1,8 @@
 # ShModBot
 
+[![Python 3.6](https://img.shields.io/badge/Python-3.6%20or%20newer-blue)](https://www.python.org/downloads/release/python-360/)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
 A Moderational Telegram bot, tailored to a specific group.
 
 ## Installation

@@ -19,6 +19,16 @@ from pyrogram import Filters, Message
 from ..shmodbot import ShModBot
 from ..utils import constants
 
-@ShModBot.on_message(Filters.command(["rules", "regeln"]) & Filters.chat(ShModBot.GROUP_ID))
+
+@ShModBot.on_message(
+    Filters.command(["rules", "regeln"]) & Filters.chat(ShModBot.GROUP_ID)
+)
 def rules(bot: ShModBot, message: Message):
+    """Replies with a message containing a brief breakdown of the basic rules.
+    Includes an inline keyboard to link the rules in-chat and online (telegram post).
+    
+    Parameters:
+        bot (`ShModBot`): The bot itself
+        message (`Message`): The message triggering the handler
+    """
     message.reply_text(**constants.rules())

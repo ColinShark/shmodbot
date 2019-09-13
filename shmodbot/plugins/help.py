@@ -22,9 +22,24 @@ from ..utils import constants
 
 @ShModBot.on_message(Filters.command(["help", "hilfe"]) & Filters.private)
 def help_private(bot: ShModBot, message: Message):
+    """Sends a message containing a helping text.
+    
+    Parameters:
+        bot (`ShModBot`): The bot itself
+        message (`Message`): The message triggering the handler
+    """
     message.reply_text(**constants.help_private())
 
 
-@ShModBot.on_message(Filters.command(["help", "hilfe"]) & Filters.chat(ShModBot.GROUP_ID))
+@ShModBot.on_message(
+    Filters.command(["help", "hilfe"]) & Filters.chat(ShModBot.GROUP_ID)
+)
 def help_group(bot: ShModBot, message: Message):
+    """Replies with a message explaining basic functionality, including an inline
+    keyboard.
+    
+    Parameters:
+        bot (`ShModBot`): The bot itself
+        message (`Message`): The message triggering the handler
+    """
     message.reply_text(**constants.help_group())

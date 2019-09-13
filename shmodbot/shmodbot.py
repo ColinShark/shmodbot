@@ -22,7 +22,13 @@ from pyrogram import Client
 
 
 class ShModBot(Client):
+    """The ShModBot class, inherited from Pyrogram's Client"""
     def __init__(self):
+        """Initialized the ShModBot Class.
+        
+        Args:
+            Client (Client): Pyrogram's Client class
+        """
         name = self.__class__.__name__.lower()
         config_file = f"{name}.ini"
 
@@ -43,7 +49,8 @@ class ShModBot(Client):
         )
 
     def start(self):
-        from .utils import sql_helper  # import startup
+        """Starts the bot, sets up the database and saves the invite link."""
+        from .utils import sql_helper
 
         sql_helper.startup()
         super().start()
@@ -52,5 +59,6 @@ class ShModBot(Client):
         logger.info(f"Bot started as {username}")
 
     def stop(self):
+        """Stops the bot"""
         super().stop()
         logger.info("Bot stopped")

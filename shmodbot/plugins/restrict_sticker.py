@@ -30,6 +30,13 @@ from ..utils import sql_helper
     & Filters.admin
 )
 def ban_pack(bot: ShModBot, message: Message):
+    """Adds the replied-to sticker to the Blacklist, which will continue to instantly
+    delete the containing stickerpack.
+    
+    Parameters:
+        bot (`ShModBot`): The bot itself
+        message (`Message`): The message triggering the handler
+    """
     message.delete()
     if not message.reply_to_message:
         return
@@ -40,6 +47,12 @@ def ban_pack(bot: ShModBot, message: Message):
     Filters.command("banned_packs", "!") & Filters.chat(ShModBot.ADMIN_GROUP_ID)
 )
 def banned_packs(bot: ShModBot, message: Message):
+    """Queries the database for all banned stickerpacks and reply with a list of those.
+    
+    Parameters:
+        bot (`ShModBot`): The bot itself
+        message (`Message`): The message triggering the handler
+    """
     packs = sql_helper.get_banned_packs()
     message.reply_text(**constants.banned_packs(packs))
 
@@ -50,6 +63,12 @@ def banned_packs(bot: ShModBot, message: Message):
     & Filters.admin
 )
 def unban_pack(bot: ShModBot, message: Message):
+    """Removes a stickerpack from the database to allow it being sent in the chat.
+    
+    Parameters:
+        bot (`ShModBot`): The bot itself
+        message (`Message`): The message triggering the handler
+    """
     message.delete()
     set_name = message.command[1]
     sql_helper.unban_pack(set_name)

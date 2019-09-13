@@ -18,12 +18,15 @@ from pyrogram import Message, Emoji, Filters, InlineKeyboardMarkup, InlineKeyboa
 
 from ..shmodbot import ShModBot
 
+
 class Filters(Filters):
-    """Eigene Klasse "Filters", vererbt von Pyrogram's "Filters" Klasse
+    """Custom class to inherit from Pyrogram's Filters module. This allows for a handy
+    Administrator Filter
     
-    Args:
-        Filters (class): Vererbte Klasse
+    Parameters:
+        Filters (class): Inherited class
     """
+
     admin = Filters.create(
         func=lambda _, msg: bool(
             msg._client.get_chat_member(msg.chat.id, msg.from_user.id).status
@@ -31,18 +34,18 @@ class Filters(Filters):
         ),
         name="AdminFilter",
     )
-    """Filter, um nur auf Administratoren zu reagieren."""
+    """Filter to only react on messages from admins."""
 
 
 def start(message: Message, invite: str) -> dict:
-    """Zum Formattieren einer Nachricht, wenn man den Bot startet.
+    """This formats a message that will be replied to the /start command.
     
-    Args:
-        message (`Message`): Die Nachricht, deren Inhalt zum Formattieren genutzt wird
-        invite (`str`): Der aktuelle Einladungslink
+    Parameters:
+        message (`Message`): The message which contents will be used to format
+        invite (`str`): The current invite link
     
     Returns:
-        dict: Dictionary zum **mapping-formatting der zu sendenen Nachricht.
+        dict: A dictionary to map to the reply_text(**args) function.
     """
     start_text = (
         "Hey {} {}\n".format(message.from_user.first_name, Emoji.WAVING_HAND)
@@ -67,6 +70,11 @@ def start(message: Message, invite: str) -> dict:
 
 
 def help_private() -> dict:
+    """This formats a help text sent to the private /help command.
+    
+    Returns:
+        dict: A dictionary to map to the reply_text(**args) function.
+    """
     help_text = (
         "Ich bin ein Bot, der in der Gruppe der Furs aus Schleswig-Holstein und Hamburg "
         + "aushelfen soll. Aktuell gibt es hier noch nicht allzu viel Informationen, "
@@ -87,6 +95,11 @@ def help_private() -> dict:
 
 
 def help_group() -> dict:
+    """This formats a help text that gets replied to the /help command in the group.
+    
+    Returns:
+        dict: A dictionary to map to the reply_text(**args) function.
+    """
     help_text = (
         f"{Emoji.INFORMATION} **Information**\n"
         + "Ich bin ein Bot, um den Admins auszuhelfen. "
@@ -109,7 +122,15 @@ def help_group() -> dict:
     return {"text": help_text, "reply_markup": help_keyboard, "parse_mode": "markdown"}
 
 
-def welcome(new_members: list):
+def welcome(new_members: list) -> dict:
+    """This formats a greeting to new members when they join the chat.
+    
+    Parameters:
+        new_members (list): The list of User objects, as present in the Message object
+    
+    Returns:
+        dict: A dictionary to map to the reply_animation(**args) function
+    """
     _animation = "CgADAgADdQUAAleAoUs9098bzMbkwBYE"
     _mention = '<a href="tg://user?id={id}">{name}</a>'
     mention = [_mention.format(id=x.id, name=x.first_name) for x in new_members]
@@ -143,6 +164,11 @@ def welcome(new_members: list):
 
 
 def rules() -> dict:
+    """This formats a message to reply to the /rules (or german /regeln) command.
+    
+    Returns:
+        dict: A dictionary to map to the reply_text(**args) function
+    """
     rules_text = (
         Emoji.SCROLL
         + " **Regeln**\n"
@@ -174,19 +200,40 @@ def rules() -> dict:
     }
 
 
-def anti_spam():
+def anti_spam() -> dict:
+    """Format a short message to warn users about too many stickers or gifs in a row.
+    
+    Returns:
+        dict: A dictionary to map to the reply_text(**args) function
+    """
     antispam_text = "Zu viele Sticker/GIFs hintereinander. Bitte nicht damit spammen."
     return {"text": antispam_text, "parse_mode": None}
 
 
-def banned_packs(packs: list):
+def banned_packs(packs: list) -> dict:
+    """Formats a message with the currently banned packs.
+    
+    Parameters:
+        packs (list): The list of currently banned packs
+    
+    Returns:
+        dict: A dictionary to map to the reply_text(**args) function
+    """
     pack_text = "**Gesperrte Sticker:**\n"
     for pack in packs:
         pack_text += "[◆](https://t.me/addstickers/{0}) `{0}`\n".format(pack)
     return {"text": pack_text, "parse_mode": "markdown"}
 
 
-def report(message: Message):
+def report(message: Message) -> dict:
+    """Formats a message to send with the forwarded reported message.
+    
+    Parameters:
+        message (Message): The message object of the reporting message
+    
+    Returns:
+        dict: A dictionary to map to the send_message(**args) function
+    """
     reporter = '<a href="tg://user?id={id}">{name}</a>'.format(
         id=message.from_user.id, name=message.from_user.first_name
     )

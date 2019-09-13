@@ -22,6 +22,13 @@ from ..utils import constants
 
 @ShModBot.on_message(Filters.command("report", "!"))
 def report(bot: ShModBot, message: Message):
+    """Forwards a replied-to message to the admin chat and sends a follow-up message
+    with an inline keyboard to link the reported and reporting message.
+    
+    Parameters:
+        bot (`ShModBot`): The bot itself
+        message (`Message`): The message triggering the handler
+    """
     if message.reply_to_message:
         message.reply_to_message.forward(ShModBot.ADMIN_GROUP_ID)
         bot.send_message(chat_id=ShModBot.ADMIN_GROUP_ID, **constants.report(message))

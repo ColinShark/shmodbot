@@ -21,29 +21,50 @@ from ..shmodbot import ShModBot
 
 
 def startup():
+    """Initiates the database when the bot is first started"""
     with sqlite3.connect(ShModBot.DATABASE) as db:
         with open(str(Path(__file__).parent / "schema.sql"), "r") as schema:
             db.executescript(schema.read())
 
 
 def set_invite_link(invite: str):
+    """Saves a new invite link to the database
+    
+    Parameters:
+        invite (str): The current invite link
+    """
     with sqlite3.connect(ShModBot.DATABASE) as db:
         db.execute("DELETE FROM invite_link")
-        db.execute("INSERT INTO invite_link VALUES (?)", (invite, ))
+        db.execute("INSERT INTO invite_link VALUES (?)", (invite,))
 
 
 def get_invite_link() -> str:
+    """Retrieves the current invite link from the database.
+    
+    Returns:
+        str: The invite link
+    """
     with sqlite3.connect(ShModBot.DATABASE) as db:
         r = db.execute("SELECT invite FROM invite_link")
         return r.fetchone()[0]
 
 
 def add_banned_pack(set_name: str):
+    """Adds a new Stickerpack to the database
+    
+    Parameters:
+        set_name (str): The unique name of the stickerpack
+    """
     with sqlite3.connect(ShModBot.DATABASE) as db:
         db.execute("INSERT INTO banned_packs VALUES (?)", (set_name.lower(),))
 
 
 def get_banned_packs() -> list:
+    """Retrieve all banned Stickerpacks from the database
+    
+    Returns:
+        list: A list of all packs
+    """
     with sqlite3.connect(ShModBot.DATABASE) as db:
         r = db.execute("SELECT set_name FROM banned_packs ORDER BY set_name")
         banned_packs = [x[0] for x in r]
@@ -51,11 +72,24 @@ def get_banned_packs() -> list:
 
 
 def unban_pack(set_name: str):
+    """Removes an entry from the database.
+    
+    Parameters:
+        set_name (str): The unique name of a stickerpack to be removed
+    """
     with sqlite3.connect(ShModBot.DATABASE) as db:
-        db.execute("DELETE FROM banned_packs WHERE set_name=?", (set_name.lower(), ))
+        db.execute("DELETE FROM banned_packs WHERE set_name=?", (set_name.lower(),))
 
 
 def check_banned_pack(set_name: str):
+    """Queries the database about a single stickerpack
+    
+    Parameters:
+        set_name (str): The Stickerpack to be checked
+    
+    Returns:
+        list: A list of matching stickerpacks
+    """
     with sqlite3.connect(ShModBot.DATABASE) as db:
         r = db.execute(
             "SELECT * FROM banned_packs WHERE set_name=?", (set_name.lower(),)

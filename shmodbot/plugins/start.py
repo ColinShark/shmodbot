@@ -24,6 +24,13 @@ from .help import help_private
 
 @ShModBot.on_message(Filters.command("start") & Filters.private)
 def start(bot: ShModBot, message: Message):
+    """Replies with a short introduction. If the argument is "help", reply with a brief
+    help text.
+    
+    Parameters:
+        bot (`ShModBot`): The bot itself
+        message (`Message`): The message triggering the handler
+    """
     if len(message.command) > 1:
         if message.command[1] == "help":
             help_private(bot, message)
