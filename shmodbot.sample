@@ -1,0 +1,8 @@
+[pyrogram]
+api_id = 123456
+api_hash = 123456abcdef789ghi
+
+[shmodbot]
+bot_token = 123456789:AABBCCDDEEFFGGHHIIJJKKLLMM
+group_id = -100123456789
+admin_group_id = -100123456789
