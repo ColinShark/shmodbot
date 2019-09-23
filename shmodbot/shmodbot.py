@@ -54,7 +54,6 @@ class ShModBot(Client):
 
         sql_helper.startup()
         super().start()
-        sql_helper.set_invite_link(self.export_chat_invite_link(ShModBot.GROUP_ID))
         username = self.get_me().username
         logger.info(f"Bot started as {username}")
 

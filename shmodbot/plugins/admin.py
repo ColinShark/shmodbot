@@ -14,12 +14,12 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from time import time, sleep
+from time import sleep, time
 
 from pyrogram import ChatPermissions, Message
 
 from ..shmodbot import ShModBot
-from ..utils import constants
+from ..utils import constants, sql_helper
 from ..utils.constants import Filters
 from ..utils.interval import IntervalHelper
 
@@ -29,7 +29,7 @@ def timer(message: Message):
     timestamps.
     
     Parameters:
-        message (`Message`):
+        message (Message):
             The incoming message which values need to transformed.
     
     Returns:
@@ -42,6 +42,21 @@ def timer(message: Message):
         return 0
 
 
+@ShModBot.on_message(Filters.command("invite") & Filters.chat(ShModBot.ADMIN_GROUP_ID))
+def new_invite_link(bot: ShModBot, message: Message):
+    """Generate a new Invite Link, save it to the Database and reply it.
+    
+    Args:
+        bot (ShModBot): The bot itself
+        message (Message): The message triggering the handler
+    """
+    new_link = bot.export_chat_invite_link(ShModBot.GROUP_ID)
+    sql_helper.set_invite_link(new_link)
+    message.reply_text(
+        f"Neuer Einladungslink gespeichert:\n{new_link}", disable_web_page_preview=True
+    )
+
+
 @ShModBot.on_message(
     Filters.command("ban") & Filters.chat(ShModBot.GROUP_ID) & Filters.admin
 )
@@ -49,8 +64,8 @@ def ban(bot: ShModBot, message: Message):
     """Bans a group member.
     
     Parameters:
-        bot (`ShModBot`): The bot itself
-        message (`Message`): The message triggering the handler
+        bot (ShModBot): The bot itself
+        message (Message): The message triggering the handler
     """
     message.delete()
     try:
@@ -70,8 +85,8 @@ def unban(bot: ShModBot, message: Message):
     """Unbans a previously banned member.
     
     Parameters:
-        bot (`ShModBot`): The bot itself
-        message (`Message`): The message triggering the handler
+        bot (ShModBot): The bot itself
+        message (Message): The message triggering the handler
     """
     try:
         message.delete()
@@ -89,8 +104,8 @@ def mute(bot: ShModBot, message: Message):
     """Mutes a group member.
     
     Parameters:
-        bot (`ShModBot`): The bot itself
-        message (`Message`): The message triggering the handler
+        bot (ShModBot): The bot itself
+        message (Message): The message triggering the handler
     """
     message.delete()
     try:
@@ -111,8 +126,8 @@ def unmute(bot: ShModBot, message: Message):
     """Removes a users mute.
     
     Parameters:
-        bot (`ShModBot`): The bot itself
-        message (`Message`): The message triggering the handler
+        bot (ShModBot): The bot itself
+        message (Message): The message triggering the handler
     """
     message.delete()
     try:
@@ -142,8 +157,8 @@ def kick(bot: ShModBot, message: Message):
     (that's how Telegram works).
     
     Parameters:
-        bot (`ShModBot`): The bot itself
-        message (`Message`): The message triggering the handler
+        bot (ShModBot): The bot itself
+        message (Message): The message triggering the handler
     """
     message.delete()
     try:
